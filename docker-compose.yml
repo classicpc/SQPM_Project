@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  kuksa:
+    image: ghcr.io/eclipse-kuksa/kuksa-databroker:latest
+    ports:
+      - "55555:55555"
+    command: --insecure
+    restart: unless-stopped
+
+  zenoh:
+    image: eclipse/zenoh
+    ports:
+      - "7447:7447"
+    restart: unless-stopped
