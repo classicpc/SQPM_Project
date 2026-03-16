@@ -147,6 +147,6 @@ docker compose -f ditto-docker-compose.yml down
 |---|---|
 | Khushi Patel | Kuksa setup, vehicle simulator, report formatting |
 | Prabhnoor Saini | Eclipse Ditto setup, digital twin creation, evidence collection |
-| Pranav Ashok Chaudhari | Eclipse Zenoh bridge, Kuksa-Ditto data transport |
+| Harsh Patel | Eclipse Zenoh bridge, Kuksa-Ditto data transport |
 | Lawrence Arryl Lopez | System architecture diagram, sequence diagram |
-| Harsh Patel | Functional modification (Vehicle.Brake.Condition), OpenSOVD integration, GitHub repository management |
+| Pranav Ashok Chaudhari | Functional modification (Vehicle.Brake.Condition), OpenSOVD integration, GitHub repository management |
