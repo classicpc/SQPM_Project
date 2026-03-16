@@ -135,9 +135,12 @@ docker compose down
 docker compose -f ditto-docker-compose.yml down
 ```
 
-## Role mapping support
+## Contributors
 
-- Role 1 support: Kuksa + simulator signals included
-- Role 2 support: Zenoh bridge flow included
-- Role 3 support: Ditto twin + backend rule and API evidence included
-- Role 5 support: Functional modification (`Vehicle.Brake.Condition`) included
+| Name | Contribution |
+|---|---|
+| Khushi Patel | Kuksa setup, vehicle simulator, report formatting |
+| Prabhnoor Saini | Eclipse Ditto setup, digital twin creation, evidence collection |
+| Pranav Ashok Chaudhari | Eclipse Zenoh bridge, Kuksa-Ditto data transport |
+| Lawrence Arryl Lopez | System architecture diagram, sequence diagram |
+| Harsh Patel | Functional modification (Vehicle.Brake.Condition), OpenSOVD integration, GitHub repository management |
