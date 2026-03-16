@@ -108,32 +108,38 @@ python zenoh/zenoh_to_ditto.py
 python opensovd/query_vehicle_health.py
 ```
 
-## Evidence to capture for report
-
-Take screenshots of:
-
-1. `docker compose ps` showing Kuksa, Zenoh, Ditto services running
-2. Simulator terminal showing published signals (Speed, Brake.Condition, Battery SoC, Engine Oil Temp, Steering Angle)
-3. Kuksa readback via:
-
-```bash
-python kuksa/kuksa_reader.py
-```
-
-4. Zenoh bridge terminal showing forwarding logs
-5. Zenoh → Ditto bridge terminal showing `Sent to Ditto`
-6. Twin output from:
-
-```bash
-python opensovd/query_vehicle_health.py
-```
-
 ## Stop everything
 
 ```bash
 docker compose down
 docker compose -f ditto-docker-compose.yml down
 ```
+## Screenshots
+
+### Docker Services Running
+![Docker Compose](Screenshots/docker%20compose%201.png)
+![Docker Compose Ditto](Screenshots/Docker%20compose%202.png)
+
+### Vehicle Simulator Publishing Signals
+![Vehicle Simulator](Screenshots/vehicle%20sim.png)
+
+### Kuksa Reading Back Signals
+![Kuksa Reader](Screenshots/kuksa%20reader.png)
+
+### Zenoh Bridge Forwarding Data
+![Zenoh Bridge](Screenshots/zenoh%20bridge.png)
+
+### Zenoh to Ditto Bridge
+![Zenoh to Ditto](Screenshots/zenoh%20to%20ditto.png)
+
+### Digital Twin State in Ditto
+![Ditto Twin](Screenshots/ditto%20twinning.png)
+
+### Engine Overheating Rule Triggered
+![Overheating](Screenshots/overheatting.png)
+
+### OpenSOVD Health Query
+![OpenSOVD Query](Screenshots/Screenshot%202026-03-15%20203848.png)
 
 ## Contributors
 
