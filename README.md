@@ -1,7 +1,6 @@
 # SDV Pipeline – Iteration 1 (SQPM Project)
 
 End-to-end pipeline:
-
 Vehicle Simulator → Kuksa → Zenoh → Ditto → OpenSOVD-style query
 
 ## What this implements
