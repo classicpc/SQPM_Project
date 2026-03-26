@@ -20,9 +20,24 @@ def listener(sample):
         payload = sample.payload.to_bytes() if hasattr(sample.payload, "to_bytes") else bytes(sample.payload)
         data = json.loads(payload.decode("utf-8"))
 
-        # Backend rule: flag engine as OVERHEATING if oil temperature exceeds 110°C
-        if data.get("Vehicle.Powertrain.CombustionEngine.EngineOil.Temperature", 0) > 110:
+        # Backend rule 1: classify engine status from temperature data quality and thresholds
+        engine_temp = data.get("Vehicle.Powertrain.CombustionEngine.EngineOil.Temperature")
+        if engine_temp is None:
+            data["engine_status"] = "NO_DATA"
+        elif engine_temp > 110:
             data["engine_status"] = "OVERHEATING"
+        else:
+            data["engine_status"] = "NORMAL"
+
+        # Backend rule 2: classify brake health from derived brake condition
+        brake_condition = data.get("Vehicle.Brake.Condition")
+        if isinstance(brake_condition, (int, float)):
+            if brake_condition < 20:
+                data["brake_status"] = "CRITICAL"
+            elif brake_condition < 50:
+                data["brake_status"] = "WORN"
+            else:
+                data["brake_status"] = "OK"
 
         # Send the enriched payload to Ditto via Nginx (authenticated)
         requests.put(DITTO_URL, json=data, auth=DITTO_AUTH, timeout=5)

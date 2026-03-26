@@ -1,4 +1,4 @@
-# SDV Pipeline – Iteration 1 (SQPM Project)
+# SDV Pipeline – Iteration 2 (SQPM Project)
 
 End-to-end pipeline:
 
@@ -10,10 +10,15 @@ Vehicle Simulator → Kuksa → Zenoh → Ditto → OpenSOVD-style query
 - Middleware layer: **Zenoh**
 - Vehicle telemetry simulator in Python
 - Digital twin update path into Ditto
-- Initial functional modification:
-	- Added `Vehicle.Brake.Condition`
-	- Basic degradation behavior over time in simulator
-	- Backend rule example: engine temp > 110°C marks `engine_status=OVERHEATING`
+- Iteration 2 extension:
+	- Simulated sensor faults in the simulator:
+		- Missing engine temperature signal every 8th cycle
+		- Noisy brake pedal signal every 10th cycle
+		- Delayed steering signal every 12th cycle
+	- Continuous brake degradation model (pad wear increases over time)
+	- Backend monitoring rules in digital twin pipeline:
+		- `engine_status`: `NORMAL`, `OVERHEATING`, or `NO_DATA`
+		- `brake_status`: `OK`, `WORN`, or `CRITICAL`
 
 ## Project structure
 
@@ -107,6 +112,41 @@ python zenoh/zenoh_to_ditto.py
 ```bash
 python opensovd/query_vehicle_health.py
 ```
+
+## Iteration 2 extension behavior
+
+The extension is implemented in:
+
+- `simulator/vehicle_simulator.py` (fault injection and degradation)
+- `zenoh/zenoh_to_ditto.py` (rule-based health status enrichment)
+
+Expected runtime behavior:
+
+- Simulator console prints cycle-level fault labels (`missing_engine_temp`, `noisy_brake_pedal`, `delayed_steering`).
+- Ditto twin telemetry includes interpreted health fields:
+	- `engine_status` based on temperature thresholds and missing data.
+	- `brake_status` based on derived `Vehicle.Brake.Condition`.
+
+This validates that the SDV pipeline can be extended with additional behavior in both source signals and backend logic without breaking end-to-end data flow.
+
+## Iteration 2 non-functional experiment
+
+To reproduce the non-functional evaluation (reliability + API latency comparison):
+
+```bash
+py experiments/iteration2_nonfunctional_experiment.py
+```
+
+Generated outputs:
+
+- `docs/iteration2_nonfunctional_results.csv`
+- `docs/iteration2_nonfunctional_results.md`
+
+The markdown file includes:
+
+- Results table (baseline vs faults enabled)
+- Written analysis of observed behavior
+- Summary conclusion for Iteration 2 reporting
 
 ## Stop everything
 
