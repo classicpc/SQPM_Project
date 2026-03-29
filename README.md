@@ -189,8 +189,6 @@ docker compose -f ditto-docker-compose.yml down
 
 ## Contributors
 
-## Contributors
-
 | Name | Iteration 1 Contribution | Iteration 2 Contribution |
 |---|---|---|
 | Khushi Patel | Kuksa setup, vehicle simulator, report formatting | Fault injection implementation, report, README updates |
