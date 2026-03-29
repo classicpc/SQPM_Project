@@ -39,8 +39,13 @@ SQPM_Project/
 │   └── zenoh_to_ditto.py
 ├── ditto/
 │   └── create_digital_twin.sh
-└── opensovd/
-		└── query_vehicle_health.py
+├── opensovd/
+│   └── query_vehicle_health.py
+├── experiments/
+│   └── iteration2_nonfunctional_experiment.py
+└── docs/
+    ├── iteration2_nonfunctional_results.csv
+    └── iteration2_nonfunctional_results.md
 ```
 
 ## Prerequisites
