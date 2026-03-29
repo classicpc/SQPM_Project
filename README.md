@@ -1,4 +1,5 @@
 # SDV Pipeline – Iteration 2 (SQPM Project)
+> Iteration 2 work is on the `iteration_2` branch.
 
 End-to-end pipeline:
 
@@ -188,10 +189,12 @@ docker compose -f ditto-docker-compose.yml down
 
 ## Contributors
 
-| Name | Contribution |
-|---|---|
-| Khushi Patel | Kuksa setup, vehicle simulator, report formatting |
-| Prabhnoor Saini | Eclipse Ditto setup, digital twin creation, evidence collection |
-| Harsh Patel | Eclipse Zenoh bridge, Kuksa-Ditto data transport |
-| Lawrence Arryl Lopez | System architecture diagram, sequence diagram |
-| Pranav Ashok Chaudhari | Functional modification (Vehicle.Brake.Condition), OpenSOVD integration, GitHub repository management |
+## Contributors
+
+| Name | Iteration 1 Contribution | Iteration 2 Contribution |
+|---|---|---|
+| Khushi Patel | Kuksa setup, vehicle simulator, report formatting | Fault injection implementation, report, README updates |
+| Prabhnoor Saini | Eclipse Ditto setup, digital twin creation, evidence collection | Functional validation, evidence collection |
+| Harsh Patel | Eclipse Zenoh bridge, Kuksa-Ditto data transport | Backend rule extensions (engine + brake status) |
+| Lawrence Arryl Lopez | System architecture diagram, sequence diagram | Non-functional experiment script, results analysis |
+| Pranav Ashok Chaudhari | Functional modification, OpenSOVD integration, GitHub management | Fault injection implementation, GitHub branch management, README updates |
