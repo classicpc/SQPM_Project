@@ -55,13 +55,11 @@ SQPM_Project/
 - Python 3.9+
 
 Install Python dependencies:
-
 ```bash
 pip install -r requirements.txt
 ```
 
 Equivalent explicit packages:
-
 ```bash
 pip install kuksa-client eclipse-zenoh requests
 ```
@@ -69,7 +67,6 @@ pip install kuksa-client eclipse-zenoh requests
 ## Start infrastructure
 
 From `SQPM_Project`:
-
 ```bash
 docker compose up -d
 docker compose -f ditto-docker-compose.yml up -d
@@ -78,13 +75,11 @@ docker compose -f ditto-docker-compose.yml up -d
 ## Initialize digital twin
 
 In Git Bash / WSL:
-
 ```bash
 bash ditto/create_digital_twin.sh
 ```
 
 Or in PowerShell:
-
 ```powershell
 Invoke-RestMethod -Method Put -Uri "http://localhost:8080/api/2/things/org.vehicle:car1" -Headers @{Authorization="Basic ZGl0dG86ZGl0dG8="} -ContentType "application/json" -Body '{"attributes":{"vehicleId":"car1"},"features":{"telemetry":{"properties":{"speed":0}}}}'
 ```
@@ -95,26 +90,34 @@ Ditto API auth credentials used by scripts: `ditto` / `ditto` (via nginx on `loc
 
 Open separate terminals in `SQPM_Project`:
 
-1) Start simulator
+1) (Optional) Enable fault injection before starting the simulator
 
+In PowerShell:
+```powershell
+$env:ENABLE_FAULTS="1"
+```
+In Git Bash / WSL:
+```bash
+export ENABLE_FAULTS=1
+```
+Leave unset or set to `0` to run in clean baseline mode.
+
+2) Start simulator
 ```bash
 python simulator/vehicle_simulator.py
 ```
 
-2) Start Kuksa → Zenoh bridge
-
+3) Start Kuksa → Zenoh bridge
 ```bash
 python zenoh/zenoh_bridge.py
 ```
 
-3) Start Zenoh → Ditto bridge
-
+4) Start Zenoh → Ditto bridge
 ```bash
 python zenoh/zenoh_to_ditto.py
 ```
 
-4) Query vehicle health / twin state
-
+5) Query vehicle health / twin state
 ```bash
 python opensovd/query_vehicle_health.py
 ```
@@ -125,6 +128,25 @@ The extension is implemented in:
 
 - `simulator/vehicle_simulator.py` (fault injection and degradation)
 - `zenoh/zenoh_to_ditto.py` (rule-based health status enrichment)
+
+### Fault injection reference
+
+| Fault label | Signal affected | Cycle interval | Behaviour |
+|---|---|---|---|
+| `missing_engine_temp` | Engine oil temperature | Every 8th | Key removed from payload entirely |
+| `noisy_brake_pedal` | Brake pedal position | Every 10th | Random ±40 offset added to base value |
+| `delayed_steering` | Steering wheel angle | Every 12th | Previous cycle's value replayed |
+
+### Diagnostic rules reference
+
+| Rule | Field | Condition | Status |
+|---|---|---|---|
+| Engine | `engine_status` | Temperature key missing | `NO_DATA` |
+| Engine | `engine_status` | Temperature > 110°C | `OVERHEATING` |
+| Engine | `engine_status` | Otherwise | `NORMAL` |
+| Brake | `brake_status` | Condition < 20 | `CRITICAL` |
+| Brake | `brake_status` | 20 ≤ Condition < 50 | `WORN` |
+| Brake | `brake_status` | Condition ≥ 50 | `OK` |
 
 Expected runtime behavior:
 
@@ -138,7 +160,6 @@ This validates that the SDV pipeline can be extended with additional behavior in
 ## Iteration 2 non-functional experiment
 
 To reproduce the non-functional evaluation (reliability + API latency comparison):
-
 ```bash
 py experiments/iteration2_nonfunctional_experiment.py
 ```
@@ -148,19 +169,21 @@ Generated outputs:
 - `docs/iteration2_nonfunctional_results.csv`
 - `docs/iteration2_nonfunctional_results.md`
 
-The markdown file includes:
+### Results summary
 
-- Results table (baseline vs faults enabled)
-- Written analysis of observed behavior
-- Summary conclusion for Iteration 2 reporting
+| Scenario | Samples | Avg Latency (ms) | P95 Latency (ms) | Query Success (%) | Freshness (%) | Engine NORMAL | Engine OVERHEATING | Engine NO_DATA |
+|---|---|---|---|---|---|---|---|---|
+| Baseline (faults disabled) | 20 | 78.9 | 104.32 | 100.0 | 94.74 | 19 | 1 | 0 |
+| Iteration 2 (faults enabled) | 20 | 67.43 | 83.82 | 100.0 | 94.74 | 16 | 4 | 0 |
+
+Both scenarios achieved 100% query success rate. Full analysis is in `docs/iteration2_nonfunctional_results.md`.
 
 ## Stop everything
-
 ```bash
 docker compose down
 docker compose -f ditto-docker-compose.yml down
 ```
-## Screenshots
+## Screenshots - iteration1
 
 ### Docker Services Running
 ![Docker Compose](Screenshots/docker%20compose%201.png)
